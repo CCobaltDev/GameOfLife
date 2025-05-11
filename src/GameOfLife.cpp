@@ -1,19 +1,13 @@
 #include "GameOfLife.h"
 
-/*
-Less than 2 Neighbors: Die
-More than 3 Neighbors: Die
-Exactly 3 Neighbors:   Become alive
-2-3 Neighbors:         Stay Living
-*/
-
 void GameOfLife::advance()
 {
 	generation++;
+	population = 0;
 
 	auto nextBoard = board;
 
-	for (int i = 0; i < nextBoard.size(); i++)
+	for (int i = 0; i < board.size(); i++)
 	{
 		int neighbors = 0;
 		const int x = i % GRID_CELL_COUNT;
@@ -48,27 +42,22 @@ void GameOfLife::advance()
 				neighbors++;
 		}
 
-		if (board[i] && (neighbors < 2 || neighbors > 3))
-		{
-			nextBoard[i] = false;
-			population--;
-		}
-		if (!board[i] && neighbors == 3)
-		{
-			nextBoard[i] = true;
-			population++;
-		}
+		nextBoard[i] = (neighbors == 3) || (board[i] && neighbors == 2);
 	}
 
 	board = nextBoard;
+
+	for (int i = 0; i < board.size(); i++)
+		if (board[i])
+			population++;
 }
 
 void GameOfLife::draw() const
 {
 	for (int i = 0; i < GRID_CELL_COUNT + 1; i++)
 	{
-		DrawLine(i * GRID_CELL_SIZE, 0, i * GRID_CELL_SIZE, GRID_CELL_SIZE * GRID_CELL_COUNT, WHITE);
-		DrawLine(0, i * GRID_CELL_SIZE, GRID_CELL_SIZE * GRID_CELL_COUNT, i * GRID_CELL_SIZE, WHITE);
+		DrawLine(i * GRID_CELL_SIZE, 0, i * GRID_CELL_SIZE, GRID_CELL_SIZE * GRID_CELL_COUNT, LIGHTGRAY);
+		DrawLine(0, i * GRID_CELL_SIZE, GRID_CELL_SIZE * GRID_CELL_COUNT, i * GRID_CELL_SIZE, LIGHTGRAY);
 	}
 
 	for (int i = 0; i < board.size(); i++)

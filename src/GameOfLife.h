@@ -1,8 +1,8 @@
 #ifndef GAMEOFLIFE_H
 #define GAMEOFLIFE_H
 
-#define GRID_CELL_SIZE 20
-#define GRID_CELL_COUNT 50
+#define GRID_CELL_SIZE 50
+#define GRID_CELL_COUNT 100
 
 #include <array>
 #include "raylib.h"
